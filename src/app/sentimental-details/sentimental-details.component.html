@@ -1,0 +1,43 @@
+<br><br>
+
+<div class="container">
+	<div class="row border rounded border-2 border-primary bg-light">
+		<legend class="col-12 p-3">
+			{{finnhubSentimentResponseModel.symbol}}
+			<small class="float-end text-muted" style="font-size: smaller;">
+				{{finnhubSentimentResponseModel.symbol}}
+			</small>
+		</legend>
+		<hr class="col-10 offset-1 text-info">
+		<div class="col-12 ps-3 ps-md-5 mb-4">
+			<div class="row">
+				<div
+					class="col-10 offset-1 offset-md-0 col-md"
+					*ngFor="let month of finnhubSentimentResponseModel.data; index as ind"
+					[ngClass]='{
+						"ms-md-5":ind>0
+					}'
+				>
+					<div class="container"
+						[ngClass]="{'border-end border-dark':lastItem(ind)&&mdDisplay}"
+					>
+						<sentimental-data-month
+							[data]="month"
+						></sentimental-data-month>
+					</div>
+					<div class="d-block d-md-none text-muted col-10 offset-1" *ngIf="lastItem(ind)">
+						<hr>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-12 col-md-5">
+			<a class="btn btn-danger col-12" routerLink="/">
+				&#8619; Back to list of stocks
+			</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<div class="container pt-4">
+	<div class="row border g-2 bg-light">
+		<div class="col-12">
+			<form action="" class="form-group p-3" (submit)="trackSymbol()" [formGroup]='symbolForm'>
+				<legend class="row">
+					Enter the symbol of a stock to track
+				</legend>
+				<small class="row text-muted ms-2">(i.e. AAPL, TSLA, GOOGL)</small>
+				<hr>
+				<div class="row">
+					<div class=" col-10 col-md-5 offset-1">
+						<input type="text" name="symbolName" id="stsym" placeholder="input symbol here" class="form-control" formControlName="symbolNameInput">
+						<label class="small text-muted" for="stsym">Enter Symbol (max 5 letter)</label>
+					</div>
+
+					<div class="col-10 offset-1 col-md-3 p-2 mt-3">
+					<button class="btn btn-primary col-12 text-truncate" [disabled]="symbolForm.invalid">
+							Track Stock
+						</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="alert alert-danger col-10 offset-1 p-2" role="alert" *ngIf="symbolForm.invalid&&symbolForm.touched&&symbolForm?.get('symbolNameInput')?.errors!['pattern']">
+						<strong>Only alphabetic character are allowed</strong>
+					</div>
+					<div class="alert alert-danger col-10 offset-1 p-2" role="alert" *ngIf="symbolForm.invalid&&symbolForm.touched&&symbolForm?.get('symbolNameInput')?.errors!['maxlength']">
+						<strong>Max 5 character allowed</strong>
+					</div>
+					<div class="alert alert-danger col-10 offset-1 p-2" role="alert" *ngIf="symbolForm.invalid&&symbolForm.touched&&symbolForm?.get('symbolNameInput')?.errors!['required']">
+						<strong>Symbol name is required</strong>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

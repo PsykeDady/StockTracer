@@ -1,0 +1,22 @@
+<div class="container">
+	<div class="row p-3">
+		<div class="col">
+			<button class="btn btn-danger float-end" (click)="resetApiKey()">
+				Reset Api Key
+			</button>
+		</div>
+	</div>
+</div>
+
+<symbol-input></symbol-input>
+<hr>
+<div class="container">
+	<div *ngFor="let stock of stockLists; index as i">
+		<br>
+		<div class="row border g-2 bg-light p-3">
+			<track-dialog [stockModel]="stock" (close)="removeStock(+i)">
+			</track-dialog>
+		</div>
+		<br>
+	</div>
+</div>
