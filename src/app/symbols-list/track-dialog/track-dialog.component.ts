@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { StockModel } from "src/models/stock.model";
+import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 
 @Component({
 	selector:"track-dialog",
@@ -8,7 +8,7 @@ import { StockModel } from "src/models/stock.model";
 })
 export class TrackDialogComponent {
 
-	@Input() stockModel:StockModel|null=null;
+	@Input() stockModelQuota:StockModelQuotaInterface|null=null;
 
 	@Output() close:EventEmitter<void> = new EventEmitter();
 
@@ -17,6 +17,6 @@ export class TrackDialogComponent {
 	}
 
 	stonk():boolean{
-		return this.stockModel?.changeToday!>=0??false;
+		return this.stockModelQuota?.quotaModel?.dp!>=0??false;
 	}
 }

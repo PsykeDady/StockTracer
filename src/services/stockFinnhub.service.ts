@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import {HttpClient} from "@angular/common/http"
+import {HttpClient, HttpParams} from "@angular/common/http"
 import { APIUtils } from "src/utils/API.utils";
 import { FinnhubSentimentResponseModel } from "src/models/finnhub-sentiment-response.model";
 import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
@@ -12,16 +12,22 @@ export class StockFinnhubService {
 
 	}
 
-	getSentiment():Observable<FinnhubSentimentResponseModel>{
-		return this.httpClient.get<FinnhubSentimentResponseModel>(APIUtils.FINNHUB_API_URL_GET_SENTIMENT);
+	getSentiment(symbol:string,from:string,to:string):Observable<FinnhubSentimentResponseModel>{
+		return this.httpClient.get<FinnhubSentimentResponseModel>(APIUtils.FINNHUB_API_URL_GET_SENTIMENT,{
+			params:new HttpParams().set("symbol",symbol).set("from",from).set("to",to)
+		});
 	}
 
-	getQuota():Observable<FinnhubQuotaResposeModel>{
-		return this.httpClient.get<FinnhubQuotaResposeModel>(APIUtils.FINNHUB_API_URL_GET_QUOTE);
+	getQuota(symbol:string):Observable<FinnhubQuotaResposeModel>{
+		return this.httpClient.get<FinnhubQuotaResposeModel>(APIUtils.FINNHUB_API_URL_GET_QUOTE,{
+			params: new HttpParams().set("symbol",symbol)
+		});
 	}
 
-	getSymbols(): Observable<FinnhubSearchResposeModel> {
-		return this.httpClient.get<FinnhubSearchResposeModel> (APIUtils.FINNHUB_API_URL_GET_SYMBOL);
+	getSymbols(symbol:string): Observable<FinnhubSearchResposeModel> {
+		return this.httpClient.get<FinnhubSearchResposeModel> (APIUtils.FINNHUB_API_URL_GET_SYMBOL,{
+			params: new HttpParams().set("q",symbol)
+		});
 	}
 
 }

@@ -1,9 +1,9 @@
 <div class="container">
 	<div class="row">
 		<legend class="col-12">
-			<span>{{stockModel?.stockName}}</span>
+			<span>{{stockModelQuota?.stockModel?.stockName}}</span>
 			<small class="text-muted text-end float-end">
-				({{stockModel?.stockSymbol}})
+				({{stockModelQuota?.stockModel?.stockSymbol}})
 				<span class="xclose" (click)="closeStock()">
 					&times;
 				</span>
@@ -15,18 +15,18 @@
 		<div class="col-9 small">
 			<div class="row">
 				<div class="col-6">
-					Change today: <span class="font-monospace" style="width: fit-content;">{{stockModel?.changeToday | mypercent}}</span>
+					Change today: <span class="font-monospace" style="width: fit-content;">{{stockModelQuota?.quotaModel?.dp | mypercent}}</span>
 				</div>
 				<div class="col-6">
-					Opening Price: <span class="font-monospace" style="width: fit-content;">{{stockModel?.openingPrice| currency:'USD'}}</span>
+					Opening Price: <span class="font-monospace" style="width: fit-content;">{{stockModelQuota?.quotaModel?.o| currency:'USD'}}</span>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-6">
-					Current price: <span class="font-monospace" style="width: fit-content;">{{stockModel?.changePrice| currency:'USD'}}</span>
+					Current price: <span class="font-monospace" style="width: fit-content;">{{stockModelQuota?.quotaModel?.c| currency:'USD'}}</span>
 				</div>
 				<div class="col-6">
-					Current price: <span class="font-monospace" style="width: fit-content;">{{stockModel?.changePrice| currency:'USD'}}</span>
+					High price: <span class="font-monospace" style="width: fit-content;">{{stockModelQuota?.quotaModel?.h| currency:'USD'}}</span>
 				</div>
 			</div>
 
@@ -39,7 +39,7 @@
 
 	<div class="row">
 		<div class="col-12 col-md-5">
-			<a routerLink="/sentimental/{{stockModel?.stockSymbol}}" class="btn btn-dark col-12">
+			<a routerLink="/sentimental/{{stockModelQuota?.stockModel?.stockSymbol}}" class="btn btn-dark col-12">
 				<small class="d-none d-md-block">
 					Go to social sentiment details &#10148;
 				</small>

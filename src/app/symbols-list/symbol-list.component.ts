@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
+import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 import { StockModel } from "src/models/stock.model";
 import { LocalDataService } from "src/services/local-data.service";
 
@@ -13,10 +15,34 @@ export class SymbolListComponent {
 	constructor(private localDataService:LocalDataService, private router:Router){
 	}
 
-	public stockLists: StockModel[] = [
-		new StockModel("Tesla Inc.", "TSLA", -9.6,699,703,711),
-		new StockModel("Nintendo", "NTDOY", -1.28 ,51.23,54.60,54.60),
-		new StockModel("Apple Inc.", "AAPL", 1.47 ,147.71,144.08,147.66)
+	public stockLists: StockModelQuotaInterface[] = [
+		{stockModel: new StockModel("Tesla Inc.", "TSLA"), quotaModel: new FinnhubQuotaResposeModel(
+			699,
+			0,
+			-9.6,
+			711,
+			0,
+			703,
+			0
+		)},
+		{stockModel: new StockModel("Nintendo", "NTDOY"), quotaModel: new FinnhubQuotaResposeModel(
+			51.23,
+			0,
+			-1.28,
+			54.60,
+			0,
+			54.60,
+			0
+		)},
+		{stockModel: new StockModel("Apple Inc.", "AAPL"), quotaModel: new FinnhubQuotaResposeModel(
+			147.71,
+			0,
+			1.47,
+			147.66,
+			0,
+			144.08,
+			0
+		)},
 	]
 
 	removeStock(stockIndex:number){

@@ -10,13 +10,19 @@
 
 <symbol-input></symbol-input>
 <hr>
+<br>
 <div class="container">
 	<div *ngFor="let stock of stockLists; index as i">
-		<br>
-		<div class="row border g-2 bg-light p-3">
-			<track-dialog [stockModel]="stock" (close)="removeStock(+i)">
+		<div class="col-6 border-end border-info" *ngIf="i>0">
+			<br>
+		</div>
+		<div class="row rounded border border-info g-2 bg-light p-3">
+			<track-dialog [stockModelQuota]="stock" (close)="removeStock(+i)">
 			</track-dialog>
 		</div>
-		<br>
+		<div class="col-6 border-end border-info" *ngIf="i<stockLists.length-1">
+			<br>
+		</div>
 	</div>
 </div>
+<br>
