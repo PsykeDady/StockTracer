@@ -12,9 +12,7 @@ export class ApiKeyInterceptor implements HttpInterceptor {
 		console.log("intercepted get request")
 
 		const authenticatedRequest: HttpRequest<any> = req.clone({
-			headers: new HttpHeaders({
-				"X-Finnhub-Token" : this.localDataService.getApiKey()??""
-			})
+			params:req.params.set("token",this.localDataService.getApiKey()??"")
 		});
 		return next.handle(authenticatedRequest);
 	}

@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { forkJoin } from "rxjs";
+import { map } from "rxjs/operators";
 import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
 import { FinnhubSearchResposeModel } from "src/models/finnhub-search-response.model";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
@@ -35,39 +37,27 @@ export class SymbolInputComponent implements OnInit{
 
 	trackSymbol():void{
 		let symbolName = this.symbolForm.get("symbolNameInput");
-		let stockMQI:StockModelQuotaInterface = {
-			stockModel: new StockModel("",symbolName?.value),
-			quotaModel: new FinnhubQuotaResposeModel(-1,-1,-1,-1,-1,-1,-1)
-		}
-		this.stockFinnhubService.getSymbols(symbolName?.value).subscribe(
-			(searchResposeModel: FinnhubSearchResposeModel)=>{
-				stockMQI.stockModel.stockName=searchResposeModel.result[0]?.description ?? "ERRORE";
 
-				this.stockFinnhubService.getQuota(symbolName?.value).subscribe(
-					finnhubQuotaResposeModel=>{
-						stockMQI.quotaModel=finnhubQuotaResposeModel;
-
-						this.stockListService.addStock(stockMQI);
-
-						symbolName?.reset();
-					},
-					error=>{
-						this.stockFinnhubService.errMsg=error.statusText;
-						this.loadingService.endLoading();
-					},
-					()=>{
-						this.loadingService.endLoading();
-					}
-				);
+		forkJoin([
+			this.stockFinnhubService.getSymbols(symbolName?.value),
+			this.stockFinnhubService.getQuota(symbolName?.value)
+		]).pipe(map(arr=>{
+			return {
+				stockModel: new StockModel(arr[0].result[0].description,symbolName?.value),
+				quotaModel: arr[1]
+			} as StockModelQuotaInterface
+		})).subscribe(
+			stockQuota => {
+				this.stockListService.addStock(stockQuota)
+				symbolName?.reset();
 			},
-			error=>{
+			error => {
 				this.stockFinnhubService.errMsg=error.statusText;
 				this.loadingService.endLoading();
-			},
-			()=>{
+			}, () => {
 				this.loadingService.endLoading();
 			}
-		);
+		)
 
 	}
 }

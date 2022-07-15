@@ -18,4 +18,21 @@ export class LocalDataService {
 	resetApiKey():void{
 		return localStorage.removeItem(LocalDataService.apiKey)
 	}
+
+	addSymbol(symbol:string){
+		let symbols:string[]|undefined = localStorage.getItem(LocalDataService.symbols)?.split("|")
+		if(!symbols){
+			symbols=[]
+		}
+		if(symbols.indexOf(symbol)<0){
+			symbols.push(symbol);
+			localStorage.setItem(LocalDataService.symbols,symbols.reduce((prev,curr)=>{
+				return prev+"|"+curr
+			}));
+		}
+	}
+
+	getSymbols():string[]{
+		return localStorage.getItem(LocalDataService.symbols)?.split("|")??[];
+	}
 }

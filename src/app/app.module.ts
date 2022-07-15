@@ -6,6 +6,7 @@ import { AuthenticationGuard } from 'src/guards/authentication.guard';
 import { ApiKeyInterceptor } from 'src/interceptors/api-key.interceptor';
 import { MyPercentPipe } from 'src/pipe/mypercent.pipe';
 import { SelectMonthPipe } from 'src/pipe/select-month.pipe';
+import { QuoteResolver } from 'src/resolver/quote.resolver';
 import { LoadingService } from 'src/services/loading.service';
 import { LocalDataService } from 'src/services/local-data.service';
 import { StockListService } from 'src/services/stock-list.service';
@@ -47,6 +48,7 @@ import { TrackDialogComponent } from './symbols-list/track-dialog/track-dialog.c
 	StockFinnhubService,
 	StockListService,
 	AuthenticationGuard,
+	QuoteResolver,
 	{
 		provide:HTTP_INTERCEPTORS,
 		useClass:ApiKeyInterceptor,

@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
@@ -25,13 +25,21 @@ export class SymbolListComponent implements OnDestroy {
 		private router:Router,
 		private stockFinnhubService:StockFinnhubService,
 		public stockListService:StockListService,
-		public loadingService:LoadingService
+		public loadingService:LoadingService,
+			   activatedRoute:ActivatedRoute
 	){
 		this.finishSubscription=loadingService.finish.subscribe(
 			()=>{
 				this.errMsg=stockFinnhubService.errMsg;
 			}
 		)
+		activatedRoute.data.subscribe(data=>{
+			console.log(data)
+			if(data["stockData"]) {
+				stockListService.stockLists = (data["stockData"] as StockModelQuotaInterface []).map(v=>v);
+			}
+			loadingService.endLoading();
+		})
 	}
 
 	ngOnDestroy(): void {
