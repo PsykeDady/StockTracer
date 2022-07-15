@@ -10,6 +10,6 @@ import { FinnhubSymbolModel } from "./finnhub-symbol.model";
 export class FinnhubSearchResposeModel {
 	constructor(
 		public count 	: number,
-		public result 	: FinnhubSymbolModel
+		public result 	: FinnhubSymbolModel[]
 	) {	}
 }

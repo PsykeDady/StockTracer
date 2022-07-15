@@ -1,56 +1,57 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 import { StockModel } from "src/models/stock.model";
+import { LoadingService } from "src/services/loading.service";
 import { LocalDataService } from "src/services/local-data.service";
+import { StockListService } from "src/services/stock-list.service";
+import { StockFinnhubService } from "src/services/stockFinnhub.service";
 
 @Component({
 	selector:"symbol-list",
 	templateUrl:"symbol-list.component.html",
 	styleUrls:["symbol-list.component.css"]
 })
-export class SymbolListComponent {
+export class SymbolListComponent implements OnDestroy {
 
-	constructor(private localDataService:LocalDataService, private router:Router){
+	public errMsg:string="";
+	readonly alertMessage="Error on check Finnhub Stock. Change Symbol or try to reset APIKEY";
+	public finishSubscription:Subscription|null=null;
+
+	constructor(
+		private localDataService:LocalDataService,
+		private router:Router,
+		private stockFinnhubService:StockFinnhubService,
+		public stockListService:StockListService,
+		public loadingService:LoadingService
+	){
+		this.finishSubscription=loadingService.finish.subscribe(
+			()=>{
+				this.errMsg=stockFinnhubService.errMsg;
+			}
+		)
 	}
 
-	public stockLists: StockModelQuotaInterface[] = [
-		{stockModel: new StockModel("Tesla Inc.", "TSLA"), quotaModel: new FinnhubQuotaResposeModel(
-			699,
-			0,
-			-9.6,
-			711,
-			0,
-			703,
-			0
-		)},
-		{stockModel: new StockModel("Nintendo", "NTDOY"), quotaModel: new FinnhubQuotaResposeModel(
-			51.23,
-			0,
-			-1.28,
-			54.60,
-			0,
-			54.60,
-			0
-		)},
-		{stockModel: new StockModel("Apple Inc.", "AAPL"), quotaModel: new FinnhubQuotaResposeModel(
-			147.71,
-			0,
-			1.47,
-			147.66,
-			0,
-			144.08,
-			0
-		)},
-	]
+	ngOnDestroy(): void {
+		this.finishSubscription?.unsubscribe();
+	}
 
 	removeStock(stockIndex:number){
-		this.stockLists=this.stockLists.filter((v,i)=>i!=stockIndex);
+		this.stockListService.removeStock(stockIndex)
 	}
 
 	resetApiKey():void{
 		this.localDataService.resetApiKey();
 		this.router.navigate(["/login"])
+	}
+
+	resetMsg():void{
+		console.log("closed")
+		this.errMsg="";
+		console.log("this.errMsg",this.errMsg)
+		console.log("this.stockFinnhubService.errMsg",this.stockFinnhubService.errMsg)
+		console.log("this.loadingService.loading",this.loadingService.loading)
 	}
 }

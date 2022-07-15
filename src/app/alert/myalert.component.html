@@ -1,0 +1,14 @@
+<div id="myModal" class="modal" *ngIf="!closed">
+	<div class="modal-content" [ngStyle]="classBasedType()">
+		<h3>
+			{{titolo|titlecase}}
+			<span class="close" [ngStyle]="classBasedType()"  (click)="close()" (mouseenter)="shadowX($event)" (mouseleave)="shadowX($event)">
+				<span>
+					&times;
+				</span>
+			</span>
+		</h3>
+		<hr>
+		<p class="text-muted">{{message||""}}</p>
+	</div>
+</div>

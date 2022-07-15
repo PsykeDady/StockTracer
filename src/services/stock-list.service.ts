@@ -1,8 +1,9 @@
 import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
+import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 import { StockModel } from "src/models/stock.model";
 
 export class StockListService {
-	public stockLists: {stockModel:StockModel,quotaModel:FinnhubQuotaResposeModel}[] = [
+	public stockLists: StockModelQuotaInterface[] = [
 		{stockModel: new StockModel("Tesla Inc.", "TSLA"), quotaModel: new FinnhubQuotaResposeModel(
 			699,
 			0,
@@ -32,5 +33,15 @@ export class StockListService {
 		)},
 	]
 
+	addStock(stockModelQuota: StockModelQuotaInterface){
+		this.stockLists.push(stockModelQuota);
+	}
 
+	removeStock(stockIndex:number){
+		console.log("stockIndex",stockIndex)
+		this.stockLists=this.stockLists.filter((_v,i)=>{
+			console.log("i,stockindex:",i,stockIndex)
+			return i!=stockIndex
+		});
+	}
 }

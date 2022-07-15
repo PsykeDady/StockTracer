@@ -1,0 +1,47 @@
+*{
+	/*site https://materialui.co/colors */
+	/*bg - 200*/
+	/*fg - 900*/
+	--bg-ok:#A5D6A7;
+	--bg-ko:#EF9A9A;
+	--bg-wg:#FFF59D;
+
+	--fg-ok:#1B5E20;
+	--fg-ko:#B71C1C;
+	--fg-wg:#F57F17;
+}
+
+
+.modal {
+	display: block;
+	position: fixed;
+	z-index: 9000;
+	padding-top: 100px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
+.close {
+	float: right;
+	font-weight: bold;
+	text-align: center;
+}
+
+.close:hover,
+.close:focus {
+	text-decoration: none;
+	cursor: pointer;
+}

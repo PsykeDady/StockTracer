@@ -11,8 +11,8 @@
 <symbol-input></symbol-input>
 <hr>
 <br>
-<div class="container">
-	<div *ngFor="let stock of stockLists; index as i">
+<div class="container" *ngIf="!loadingService.loading && errMsg=='' ;else loadingStatus">
+	<div *ngFor="let stock of stockListService.stockLists; index as i">
 		<div class="col-6 border-end border-info" *ngIf="i>0">
 			<br>
 		</div>
@@ -20,9 +20,21 @@
 			<track-dialog [stockModelQuota]="stock" (close)="removeStock(+i)">
 			</track-dialog>
 		</div>
-		<div class="col-6 border-end border-info" *ngIf="i<stockLists.length-1">
+		<div class="col-6 border-end border-info" *ngIf="i<stockListService.stockLists.length-1">
 			<br>
 		</div>
 	</div>
 </div>
+<ng-template #loadingStatus>
+	<div class="d-flex justify-content-center" *ngIf="errMsg=='';else showError">
+		<div class="spinner-grow text-secondary" role="status" style="width: 5rem; height: 5rem;">
+			<span class="sr-only"></span>
+		</div>
+	</div>
+</ng-template>
+<ng-template #showError>
+	<my-alert [message]="alertMessage" [titolo]="errMsg" [tipologia]="'ALERT'" (closeEvent)="resetMsg()">
+
+	</my-alert>
+</ng-template>
 <br>
