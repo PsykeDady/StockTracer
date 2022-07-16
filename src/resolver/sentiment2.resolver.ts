@@ -42,7 +42,6 @@ export class SentimentResolver implements Resolve<FinnhubSentimentResponseModel>
 			this.stockFinnhubService.getSentiment(symbol,`${year2}-${month2}-${day2}`,`${year3}-${month3}-${day3}`),
 			this.stockFinnhubService.getSentiment(symbol,`${year3}-${month3}-${day3}`,`${year4}-${month4}-${day4}`)
 		]).pipe(map(arr=>{
-			console.log(arr)
 			return new FinnhubSentimentResponseModel(arr[0].data.concat(arr[1].data).concat(arr[2].data), arr[0].symbol)}
 		))
 	}

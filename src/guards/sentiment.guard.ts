@@ -14,7 +14,6 @@ export class SentimentGuard implements CanActivate {
 
 
 		if(this.stockListService.stockLists.length==0 || this.stockListService.stockLists.length!=this.localDateService.getSymbols().length){
-			console.log("ciao")
 			return this.router.createUrlTree(["/"]);
 		}
 

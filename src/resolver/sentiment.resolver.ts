@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@angular/router";
 import { Observable, of } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import { FinnhubSentimentResponseModel } from "src/models/finnhub-sentiment-response.model";
 import { StockFinnhubService } from "src/services/stockFinnhub.service";
 
@@ -28,9 +28,20 @@ export class SentimentResolver implements Resolve<FinnhubSentimentResponseModel>
 		let year :string = `${d .getFullYear()}`;
 		let yearpre:string = `${dpre.getFullYear()}`;
 
-		return this.stockFinnhubService.getSentiment(symbol,`${yearpre}-${monthpre}-${daypre}`,`${year}-${month}-${day}`).pipe(catchError((error)=>{
-			this.stockFinnhubService.errMsg=error.statusText;
-			throw new Error(error.statusText);
-		}));
+		return this.stockFinnhubService.getSentiment(symbol,`${yearpre}-${monthpre}-${daypre}`,`${year}-${month}-${day}`).pipe(
+			map(v=>{
+				if(v.data) v.data.sort((a,b)=>{
+					return a?.month-b?.month
+				})
+				if (v.data?.length>3 ){
+					v.data=v.data?.slice(-3)??[]
+				}
+				return v;
+			}),
+			catchError((error)=>{
+				this.stockFinnhubService.errMsg=error.statusText;
+				throw new Error(error.statusText);
+			}
+		));
 	}
 }

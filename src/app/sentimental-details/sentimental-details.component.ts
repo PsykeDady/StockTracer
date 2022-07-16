@@ -25,8 +25,6 @@ export class SentimentalDetailsComponent implements OnInit, OnDestroy{
 			this.finnhubSentimentResponseModel=data["sentiments"];
 			this.stockName=data["name"];
 
-			console.log("this.finnhubSentimentResponseModel",this.finnhubSentimentResponseModel)
-			console.log("this.stockName",this.stockName)
 
 			loadingService.endLoading()
 		})
