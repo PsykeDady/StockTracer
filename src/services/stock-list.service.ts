@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
-import { StockModel } from "src/models/stock.model";
 import { LocalDataService } from "./local-data.service";
 
 @Injectable()
@@ -44,9 +42,10 @@ export class StockListService {
 	}
 
 	removeStock(stockIndex:number){
-		console.log("stockIndex",stockIndex)
-		this.stockLists=this.stockLists.filter((_v,i)=>{
-			console.log("i,stockindex:",i,stockIndex)
+		this.stockLists=this.stockLists.filter((v,i)=>{
+			if(i==stockIndex){
+				this.localDataService.removeSymbol(v.stockModel.stockSymbol);
+			}
 			return i!=stockIndex
 		});
 	}

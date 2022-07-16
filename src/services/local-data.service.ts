@@ -19,16 +19,34 @@ export class LocalDataService {
 		return localStorage.removeItem(LocalDataService.apiKey)
 	}
 
-	addSymbol(symbol:string){
+	addSymbol(symbol:string):void{
+		symbol=symbol.toUpperCase();
 		let symbols:string[]|undefined = localStorage.getItem(LocalDataService.symbols)?.split("|")
 		if(!symbols){
 			symbols=[]
 		}
-		if(symbols.indexOf(symbol)<0){
+		if(! symbols.some(v=>v.toUpperCase()==symbol)){
 			symbols.push(symbol);
 			localStorage.setItem(LocalDataService.symbols,symbols.reduce((prev,curr)=>{
 				return prev+"|"+curr
 			}));
+		}
+	}
+
+	removeSymbol(symbol:string):void{
+		let symbols:string[]|undefined = localStorage.getItem(LocalDataService.symbols)?.split("|")
+		if(!symbols){
+			return;
+		}
+		if(symbols.indexOf(symbol)>=0){
+			symbols=symbols.filter(s=>s!=symbol)
+			if(symbols.length==0){
+				localStorage.removeItem(LocalDataService.symbols)
+			} else {
+				localStorage.setItem(LocalDataService.symbols,symbols.reduce((prev,curr)=>{
+					return prev+"|"+curr
+				}));
+			}
 		}
 	}
 

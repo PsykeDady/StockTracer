@@ -10,7 +10,7 @@ export class ApiKeyInterceptor implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		console.log("intercepted get request")
-
+		console.log("req",req)
 		const authenticatedRequest: HttpRequest<any> = req.clone({
 			params:req.params.set("token",this.localDataService.getApiKey()??"")
 		});

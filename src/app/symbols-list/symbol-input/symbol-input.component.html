@@ -29,6 +29,9 @@
 					<div class="alert alert-danger col-10 offset-1 p-2" role="alert" *ngIf="symbolForm.invalid&&symbolForm.touched&&symbolForm?.get('symbolNameInput')?.errors!['required']">
 						<strong>Symbol name is required</strong>
 					</div>
+					<div class="alert alert-danger col-10 offset-1 p-2" role="alert" *ngIf="symbolForm.invalid&&symbolForm.touched&&symbolForm?.get('symbolNameInput')?.errors!['alreadyRegistered']">
+						<strong>Symbol already registered</strong>
+					</div>
 				</div>
 			</form>
 		</div>

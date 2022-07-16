@@ -2,8 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { forkJoin } from "rxjs";
 import { map } from "rxjs/operators";
-import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
-import { FinnhubSearchResposeModel } from "src/models/finnhub-search-response.model";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 import { StockModel } from "src/models/stock.model";
 import { LoadingService } from "src/services/loading.service";
@@ -22,7 +20,7 @@ export class SymbolInputComponent implements OnInit{
 	constructor(
 		private stockListService:StockListService,
 		private stockFinnhubService : StockFinnhubService,
-		public loadingService: LoadingService
+		public  loadingService: LoadingService
 	){}
 
 	ngOnInit() {
@@ -30,20 +28,33 @@ export class SymbolInputComponent implements OnInit{
 			"symbolNameInput" : new FormControl("",[
 				Validators.required,
 				Validators.maxLength(5),
-				Validators.pattern(/^[A-Za-z]*$/)
+				Validators.pattern(/^[A-Za-z]*$/),
+				this.symbolAlreadyRegistered.bind(this)
 			])
 		})
 	}
 
+	symbolAlreadyRegistered(f:FormControl):{[s:string]:boolean}|null {
+		if(!this.stockListService.stockLists || this.stockListService.stockLists?.length==0) return null;
+		let uvalue=f.value?(f.value as string).toUpperCase():"";
+		if(this.stockListService.stockLists?.some(v=>{
+			return v.stockModel.stockSymbol.toUpperCase()==uvalue
+		})) {
+			return {'alreadyRegistered':true};
+		}
+		return null;
+	}
+
+
 	trackSymbol():void{
 		let symbolName = this.symbolForm.get("symbolNameInput");
-
+		let newSymbol= (symbolName?.value as string).toUpperCase()
 		forkJoin([
-			this.stockFinnhubService.getSymbols(symbolName?.value),
-			this.stockFinnhubService.getQuota(symbolName?.value)
+			this.stockFinnhubService.getSymbols(newSymbol),
+			this.stockFinnhubService.getQuota(newSymbol)
 		]).pipe(map(arr=>{
 			return {
-				stockModel: new StockModel(arr[0].result[0].description,symbolName?.value),
+				stockModel: new StockModel(arr[0].result[0].description,newSymbol),
 				quotaModel: arr[1]
 			} as StockModelQuotaInterface
 		})).subscribe(
@@ -58,6 +69,5 @@ export class SymbolInputComponent implements OnInit{
 				this.loadingService.endLoading();
 			}
 		)
-
 	}
 }

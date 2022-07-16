@@ -1,8 +1,9 @@
 import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { FinnhubSentimentalDataModel } from "src/models/finnhub-sentiment-data.model";
 import { FinnhubSentimentResponseModel } from "src/models/finnhub-sentiment-response.model";
+import { LoadingService } from "src/services/loading.service";
+import { StockFinnhubService } from "src/services/stockFinnhub.service";
 
 @Component({
 	selector:"sentimental-details",
@@ -13,18 +14,21 @@ export class SentimentalDetailsComponent implements OnInit, OnDestroy{
 
 	subscribtion:Subscription|null=null;
 	mdDisplay:boolean=false;
+	stockName:string=""
+	readonly alertMessage="Error on check Finnhub Stock. Change Symbol or try to reset APIKEY";
 
+	finnhubSentimentResponseModel:FinnhubSentimentResponseModel|null= null;
 
-	finnhubSentimentResponseModel:FinnhubSentimentResponseModel= new FinnhubSentimentResponseModel([
-		new FinnhubSentimentalDataModel(-150,1,12.56,"",2022),
-		new FinnhubSentimentalDataModel(78  ,2,25.46,"",2022),
-		new FinnhubSentimentalDataModel(89  ,3,29.43,"",2022)
-	],"");
+	constructor(activatedRoute:ActivatedRoute,public loadingService:LoadingService){
 
-	constructor(activatedRoute:ActivatedRoute){
-		this.subscribtion = activatedRoute.params.subscribe(params=>{
-			console.log(params)
-			this.finnhubSentimentResponseModel.symbol=params["symbol"];
+		activatedRoute.data.subscribe(data=> {
+			this.finnhubSentimentResponseModel=data["sentiments"];
+			this.stockName=data["name"];
+
+			console.log("this.finnhubSentimentResponseModel",this.finnhubSentimentResponseModel)
+			console.log("this.stockName",this.stockName)
+
+			loadingService.endLoading()
 		})
 	}
 
@@ -42,7 +46,9 @@ export class SentimentalDetailsComponent implements OnInit, OnDestroy{
 	}
 
 	lastItem(ind:number):boolean{
-		return ind<this.finnhubSentimentResponseModel.data.length-1
+
+		return !!this.finnhubSentimentResponseModel && ind<this.finnhubSentimentResponseModel.data.length-1;
 	}
+
 
 }

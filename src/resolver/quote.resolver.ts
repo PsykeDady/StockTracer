@@ -21,26 +21,23 @@ export class QuoteResolver implements Resolve<StockModelQuotaInterface[]|null> {
 
 	resolve(): Observable<StockModelQuotaInterface[]|null> | Promise<StockModelQuotaInterface[]|null> | StockModelQuotaInterface[]|null {
 		let symbols:string[]=this.localDataService.getSymbols();
-		console.log("symbols",symbols)
-		console.log("this.stockListService.stockLists",this.stockListService.stockLists)
 
 		if(this.stockListService.stockLists.length!=0 || symbols.length==0) {
 			return null;
 		}
-		console.log("here lets go with observables.")
 		let observables: Observable<StockModelQuotaInterface>[] =[];
 		symbols.forEach(v=>{
+			let uv=v.toUpperCase();
 			observables.push(forkJoin([
-				this.stockFinnhubService.getSymbols(v),
-				this.stockFinnhubService.getQuota(v)
+				this.stockFinnhubService.getSymbols(uv),
+				this.stockFinnhubService.getQuota(uv)
 			]).pipe(map( arr => {
 				return {
-					stockModel: new StockModel(arr[0].result[0].description,v),
+					stockModel: new StockModel(arr[0].result[0].description,uv),
 					quotaModel: arr[1]
 				} as StockModelQuotaInterface
 			})))
 		})
-		console.log("observables",observables)
 		return forkJoin(observables);
 	}
 }

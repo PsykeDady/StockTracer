@@ -1,9 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { FinnhubQuotaResposeModel } from "src/models/finnhub-quota-response.model";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
-import { StockModel } from "src/models/stock.model";
 import { LoadingService } from "src/services/loading.service";
 import { LocalDataService } from "src/services/local-data.service";
 import { StockListService } from "src/services/stock-list.service";
@@ -34,7 +32,6 @@ export class SymbolListComponent implements OnDestroy {
 			}
 		)
 		activatedRoute.data.subscribe(data=>{
-			console.log(data)
 			if(data["stockData"]) {
 				stockListService.stockLists = (data["stockData"] as StockModelQuotaInterface []).map(v=>v);
 			}
@@ -56,10 +53,7 @@ export class SymbolListComponent implements OnDestroy {
 	}
 
 	resetMsg():void{
-		console.log("closed")
 		this.errMsg="";
-		console.log("this.errMsg",this.errMsg)
-		console.log("this.stockFinnhubService.errMsg",this.stockFinnhubService.errMsg)
-		console.log("this.loadingService.loading",this.loadingService.loading)
+		this.stockFinnhubService.errMsg="";
 	}
 }

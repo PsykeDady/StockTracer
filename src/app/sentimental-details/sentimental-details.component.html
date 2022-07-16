@@ -1,11 +1,11 @@
 <br><br>
 
-<div class="container">
+<div class="container" *ngIf="!loadingService.loading;else loadingStatus">
 	<div class="row border rounded border-2 border-primary bg-light">
 		<legend class="col-12 p-3">
-			{{finnhubSentimentResponseModel.symbol}}
+			{{stockName}}
 			<small class="float-end text-muted" style="font-size: smaller;">
-				{{finnhubSentimentResponseModel.symbol}}
+				{{finnhubSentimentResponseModel?.symbol}}
 			</small>
 		</legend>
 		<hr class="col-10 offset-1 text-info">
@@ -13,7 +13,7 @@
 			<div class="row">
 				<div
 					class="col-10 offset-1 offset-md-0 col-md"
-					*ngFor="let month of finnhubSentimentResponseModel.data; index as ind"
+					*ngFor="let month of finnhubSentimentResponseModel?.data; index as ind"
 					[ngClass]='{
 						"ms-md-5":ind>0
 					}'
@@ -41,3 +41,12 @@
 		</div>
 	</div>
 </div>
+
+
+<ng-template #loadingStatus>
+	<div class="d-flex justify-content-center">
+		<div class="spinner-grow text-secondary" role="status" style="width: 5rem; height: 5rem;">
+			<span class="sr-only"></span>
+		</div>
+	</div>
+</ng-template>
