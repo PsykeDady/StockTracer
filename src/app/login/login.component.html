@@ -21,4 +21,8 @@
 			</form>
 		</div>
 	</div>
+	<div class="row" *ngIf="stockFinnhubService.errMsg!=''" (click)="resetMsg()">
+		<my-alert [titolo]="'Ops..'" [message]="stockFinnhubService.errMsg" [tipologia]="'ALERT'"
+		></my-alert>
+	</div>
 </div>

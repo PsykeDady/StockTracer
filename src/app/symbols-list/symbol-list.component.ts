@@ -17,6 +17,7 @@ export class SymbolListComponent implements OnDestroy {
 	public errMsg:string="";
 	readonly alertMessage="Error on check Finnhub Stock. Change Symbol or try to reset APIKEY";
 	public finishSubscription:Subscription|null=null;
+	public dataSubscription:Subscription|null=null;
 
 	constructor(
 		private localDataService:LocalDataService,
@@ -41,6 +42,7 @@ export class SymbolListComponent implements OnDestroy {
 
 	ngOnDestroy(): void {
 		this.finishSubscription?.unsubscribe();
+		this.dataSubscription?.unsubscribe();
 	}
 
 	removeStock(stockIndex:number){

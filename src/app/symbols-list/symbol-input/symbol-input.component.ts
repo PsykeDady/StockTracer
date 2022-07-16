@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { forkJoin } from "rxjs";
+import { forkJoin, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 import { StockModel } from "src/models/stock.model";
@@ -49,7 +49,7 @@ export class SymbolInputComponent implements OnInit{
 	trackSymbol():void{
 		let symbolName = this.symbolForm.get("symbolNameInput");
 		let newSymbol= (symbolName?.value as string).toUpperCase()
-		forkJoin([
+		let subscription:Subscription=forkJoin([
 			this.stockFinnhubService.getSymbols(newSymbol),
 			this.stockFinnhubService.getQuota(newSymbol)
 		]).pipe(map(arr=>{
@@ -65,8 +65,10 @@ export class SymbolInputComponent implements OnInit{
 			error => {
 				this.stockFinnhubService.errMsg=error.statusText;
 				this.loadingService.endLoading();
+				subscription?.unsubscribe()
 			}, () => {
 				this.loadingService.endLoading();
+				subscription?.unsubscribe()
 			}
 		)
 	}

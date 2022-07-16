@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
+import { Resolve, Router } from "@angular/router";
 import { forkJoin, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import { StockModelQuotaInterface } from "src/models/stock-model-quota.interface";
 import { StockModel } from "src/models/stock.model";
 import { LocalDataService } from "src/services/local-data.service";
@@ -14,7 +14,8 @@ export class QuoteResolver implements Resolve<StockModelQuotaInterface[]|null> {
 	constructor(
 		private localDataService:LocalDataService,
 		private stockFinnhubService:StockFinnhubService,
-		private stockListService:StockListService
+		private stockListService:StockListService,
+		private router : Router
 	){
 
 	}
@@ -31,12 +32,19 @@ export class QuoteResolver implements Resolve<StockModelQuotaInterface[]|null> {
 			observables.push(forkJoin([
 				this.stockFinnhubService.getSymbols(uv),
 				this.stockFinnhubService.getQuota(uv)
-			]).pipe(map( arr => {
-				return {
-					stockModel: new StockModel(arr[0].result[0].description,uv),
-					quotaModel: arr[1]
-				} as StockModelQuotaInterface
-			})))
+			]).pipe(
+				map( arr => {
+					return {
+						stockModel: new StockModel(arr[0].result[0].description,uv),
+						quotaModel: arr[1]
+					} as StockModelQuotaInterface
+				}),
+				catchError((err)=>{
+					this.stockFinnhubService.errMsg="can't retrieve data! Reset api key?"
+					this.router.navigate(["/login"])
+					throw new Error(err.statusText);
+				})
+			))
 		})
 		return forkJoin(observables);
 	}

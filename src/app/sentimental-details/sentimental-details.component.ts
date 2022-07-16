@@ -21,7 +21,7 @@ export class SentimentalDetailsComponent implements OnInit, OnDestroy{
 
 	constructor(activatedRoute:ActivatedRoute,public loadingService:LoadingService){
 
-		activatedRoute.data.subscribe(data=> {
+		this.subscribtion=activatedRoute.data.subscribe(data=> {
 			this.finnhubSentimentResponseModel=data["sentiments"];
 			this.stockName=data["name"];
 
