@@ -1,9 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
 import { FinnhubSentimentResponseModel } from "src/models/finnhub-sentiment-response.model";
 import { LoadingService } from "src/services/loading.service";
-import { StockFinnhubService } from "src/services/stockFinnhub.service";
 
 @Component({
 	selector:"sentimental-details",

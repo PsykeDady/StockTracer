@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from "@a
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { FinnhubSentimentResponseModel } from "src/models/finnhub-sentiment-response.model";
+import { LoadingService } from "src/services/loading.service";
 import { StockFinnhubService } from "src/services/stockFinnhub.service";
 
 @Injectable()
@@ -10,7 +11,8 @@ export class SentimentResolver implements Resolve<FinnhubSentimentResponseModel>
 
 	constructor(
 		private stockFinnhubService:StockFinnhubService,
-		private router:Router
+		private router:Router,
+		private loadingService: LoadingService
 	){}
 
 	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): FinnhubSentimentResponseModel | Observable<FinnhubSentimentResponseModel> | Promise<FinnhubSentimentResponseModel> {
@@ -39,7 +41,10 @@ export class SentimentResolver implements Resolve<FinnhubSentimentResponseModel>
 				return v;
 			}),
 			catchError((error)=>{
-				this.stockFinnhubService.errMsg=error.statusText;
+				this.stockFinnhubService.errMsg="Error. Try to reset API KEY";
+				console.log("ciao")
+				this.loadingService.endLoading()
+				this.router.navigate(["/"])
 				throw new Error(error.statusText);
 			}
 		));
